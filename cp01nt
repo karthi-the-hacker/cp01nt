@@ -1,0 +1,40 @@
+#!/bin/bash
+clear
+red='\e[1;31m%s\e[0m\n'
+green='\e[1;32m%s\e[0m\n'
+./.banner
+subofsub=$2
+if  [ $subofsub = "all-sub" ]&> /dev/null ;
+  then
+      printf "$green" "Brute forcing subdomains of subdomains and hunting for subdomain takeover " 
+      read -p " Enter the Domain name  : " dm
+      read -p " Enter the company name : " cm 
+      mkdir ~/recon/$cm &> /dev/null
+      mkdir ~/recon/$cm/cp01nt &> /dev/null
+      while read sub ;
+         do 
+           echo "$sub.$dm" >> v.txt
+           while read subl ;
+              do
+                echo "$sub.$subl" >> subv.txt
+              done < $3
+	done < $1  
+
+	cd ~/recon/$cm/cp01nt
+        cat subv.txt | xargs -n1 -P500 bash .cp01nt
+        rm ~/tools/cp01nt/subv.txt &> /dev/null
+        rm ~/tools/cp01nt/v.txt &> /dev/null
+else
+  printf "$red" "Brute forcing subdomains and  hunting for subdomain takeover " 
+  read -p " Enter the Domain name  : " dm
+  read -p " Enter the company name : " cm 
+  mkdir ~/recon/$cm &> /dev/null
+  mkdir ~/recon/$cm/cp01nt &> /dev/null
+  while read sub ;
+     do 
+       echo "$sub.$dm" >> v.txt 
+     done < $1
+  cd ~/recon/$cm/cp01nt
+  cat ~/tools/cp01nt/v.txt | xargs -n1 -P500 bash ~/tools/cp01nt/.cp01nt
+  rm ~/tools/cp01nt/v.txt &> /dev/null
+fi

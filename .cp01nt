@@ -1,0 +1,12 @@
+#!/bin/bash
+
+domlist=$1
+
+host -t CNAME $domlist | grep 'an alias' | tee -a cp01nt.txt
+
+if host $domlist &> /dev/null;
+   then
+       echo $subs >> cp01nt-sub.txt
+fi
+
+
