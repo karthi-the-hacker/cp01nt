@@ -2,11 +2,10 @@
 
 domlist=$1
 
-host -t CNAME $domlist | grep 'an alias' | tee -a cp01nt.txt
+host -t CNAME $domlist | grep --color=always 'an alias' | tee -a cp01nt.txt
 
 if host $domlist &> /dev/null;
    then
-       echo $subs >> cp01nt-sub.txt
+       echo $domlist >> cp01nt-sub.txt
 fi
-
 
